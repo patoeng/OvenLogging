@@ -1,0 +1,190 @@
+﻿@model IEnumerable<Oven.Models.OvenDB>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OvenGraphSetting.upper_limit_color)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.OvenPattern.OvenID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HeatingType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SetPoint1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SetPoint2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.interval1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.interval2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.interval3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalHeatTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tolerance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProbeIPAddr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProbeUDPPort)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AlarmIPAddr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AlarmUDPPort)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastalarm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsRunning)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.created_at)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.updated_at)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.barcode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.alarm_main)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dateone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.blinkalarm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.alarmautofixed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.alarmFetchStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.currentBatchStep)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OvenGraphSetting.upper_limit_color)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OvenPattern.OvenID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HeatingType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SetPoint1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SetPoint2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.interval1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.interval2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.interval3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.totalHeatTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tolerance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProbeIPAddr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProbeUDPPort)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AlarmIPAddr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AlarmUDPPort)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lastalarm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsRunning)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.created_at)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.updated_at)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.barcode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.alarm_main)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dateone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.blinkalarm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.alarmautofixed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.alarmFetchStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.currentBatchStep)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OvenID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.OvenID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OvenID })
+        </td>-->
+    </tr>
+}
+
+</table>

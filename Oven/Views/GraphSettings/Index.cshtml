@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Oven.Models.OvenGraphSetting>
+
+@{
+    ViewBag.Title = "Oven Graph Setting";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OvenDB.HeatingType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.max_x)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.max_y)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ticksize)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.limit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.limit_tolerance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.upper_limit_color)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lower_limit_color)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.target_color)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.background_color)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.graph_color)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.alias)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OvenDB.HeatingType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.max_x)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.max_y)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ticksize)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.limit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.limit_tolerance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.upper_limit_color)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lower_limit_color)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.target_color)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.background_color)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.graph_color)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.alias)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OvenID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.OvenID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OvenID })
+        </td>
+    </tr>
+}
+
+</table>

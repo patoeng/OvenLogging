@@ -1,0 +1,162 @@
+﻿@model Oven.Models.HeatingBatch
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>HeatingBatch</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BatchPattern.Batchid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BatchPattern.Batchid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OvenDB.HeatingType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OvenDB.HeatingType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HeatingType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HeatingType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SetPoint1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SetPoint1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SetPoint2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SetPoint2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Interval1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Interval1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Interval2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Interval2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Interval3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Interval3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalHeatTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalHeatTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tolerance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tolerance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dummyname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dummyname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_overrided)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_overrided)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.overrideid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.overrideid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_dummy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_dummy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.manual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.manual)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BatchID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

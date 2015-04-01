@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Oven.Models.BatchTemperature>
+
+@{
+    ViewBag.Title = "ListSuhu";
+}
+
+<h2>ListSuhu</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FetchTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Temperature)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FetchTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Temperature)
+        </td>
+    </tr>
+}
+
+</table>

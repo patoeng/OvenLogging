@@ -1,0 +1,285 @@
+﻿@model IEnumerable<Oven.Models.HeatingBatch>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <img src="~/Images/logo_Infineon.png" style="margin:10px 10px;" />
+    </div>
+    <div class="col-md-6">
+        <h2 id="judul">Chart History</h2>
+    </div>
+    <div class="col-md-3" style="text-align:right; padding-top:20px;">
+        <p>
+            @DateTime.Now.DayOfWeek, @DateTime.Now.Day / @DateTime.Now.Month / @DateTime.Now.Year [LW2214]
+            <!-- <br />
+            PM Due :
+            <br/>
+            PM Next : LW2314-->
+        </p>
+    </div>
+</div>
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BatchPattern.Batchid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OvenDB.HeatingType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HeatingType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SetPoint1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SetPoint2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Interval1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Interval2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Interval3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalHeatTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tolerance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dummyname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_overrided)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.overrideid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_dummy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.manual)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BatchPattern.Batchid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OvenDB.HeatingType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HeatingType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SetPoint1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SetPoint2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Interval1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Interval2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Interval3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalHeatTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tolerance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dummyname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_overrided)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.overrideid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_dummy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.manual)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.BatchID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.BatchID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.BatchID })
+        </td>
+    </tr>
+}
+
+</table>
+-->
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            <tr>
+                <td>Start Date</td>
+                <td><input type="text" id="txtstartDate">
+                </td>
+            </tr>
+            <tr>
+                <td>End Date</td>
+                <td>
+                    <input type="text" id="txtendDate">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table">
+            <tr>
+                <td>Oven ID</td>
+                <td>
+                    <input type="text" id="inp-ovenID">
+                </td>
+            </tr>
+            <tr>
+                <td>Batch ID</td>
+                <td>
+                    <input type="text" id="inp-batchID">
+                </td>
+            </tr>
+            <tr>
+                <td>Lot Number</td>
+                <td>
+                    <input type="text" id="inp-lot">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="btn-search" class="btn btn-default">Search</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript" language="javascript">
+        $(function () {
+            $('#txtstartDate').datepicker({
+                /*minDate: 0,
+                maxDate: "+60D",*/
+                numberOfMonths: 2,
+                dateFormat: 'dd-MM-yy',
+                onSelect: function (selected) {
+                    $("#txtendDate").datepicker("option","minDate", selected)
+                }
+            });
+            $('#txtendDate').datepicker({
+                /*minDate: 0,
+                maxDate: "+60D",*/
+                numberOfMonths: 2,
+                dateFormat: 'dd-MM-yy',
+                onSelect: function (selected) {
+                    $("#txtstartDate").datepicker("option", "maxDate", selected)
+                }
+            });
+        });
+
+        $("#btn-search").click(function () {
+            var _startDate = Date();
+            var _endDate = Date();
+            var _batchID = 0;
+            var _ovenID = "";
+
+            if ($("#txtstartDate").val() != "") {
+                _startDate = $("#txtstartDate").val().toString();
+            } else {
+                _startDate = null;
+            }
+
+            if ($("#txtendDate").val() != "") {
+                _startDate = $("#txtendDate").val().toString();
+            } else {
+                _endDate = null;
+            }
+            
+            if ($("#inp-batchID").val() != "") {
+                _batchID = $("#inp-batchID").val();
+            }
+
+            if ($("#inp-ovenID").val() != "") {
+                _ovenID = $("#inp-ovenID").val();
+            }
+
+            console.log(_startDate);
+            console.log(_endDate);
+            console.log(_batchID);
+            console.log(_ovenID);
+
+            /*var _startDate = $("#txtstartDate").val();
+            var _endDate = $("#txtendDate").val();
+            var _batchID = $("#inp-batchID").val();
+            var _ovenID = $("#inp-ovenID").val();*/
+            
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetHeatingBatches", "HeatingBatches")',
+                contentType: "application/json; charset=utf-8",
+                /*data: {
+                    "startDate": _startDate,
+                    "endDate": _endDate,
+                    "batchID": _batchID,
+                    "ovenid": _ovenID,
+                },*/
+                data: {
+                    startDate: _startDate,
+                    endDate: _endDate,
+                    batchID: _batchID,
+                    ovenid: _ovenID,
+                },
+                dataType: "json",
+                success: function () {
+                    console.log('Sukses');
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error eksekusi');
+                }
+            });
+        });
+    </script>
+}

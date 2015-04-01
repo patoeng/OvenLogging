@@ -1,0 +1,120 @@
+﻿@model Oven.Models.OvenGraphSetting
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>OvenGraphSetting</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OvenDB.HeatingType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OvenDB.HeatingType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.max_x)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.max_x)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.max_y)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.max_y)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ticksize)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ticksize)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.limit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.limit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.limit_tolerance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.limit_tolerance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.upper_limit_color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.upper_limit_color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lower_limit_color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lower_limit_color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.target_color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.target_color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.background_color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.background_color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.graph_color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.graph_color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.alias)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.alias)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

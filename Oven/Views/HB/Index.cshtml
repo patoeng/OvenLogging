@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Oven.Models.HeatingBatch>
+
+@{
+    ViewBag.Title = "HB Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BatchPattern.Batchid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OvenDB.HeatingType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HeatingType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SetPoint1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SetPoint2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Interval1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Interval2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Interval3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalHeatTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tolerance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dummyname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_overrided)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.overrideid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_dummy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.manual)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BatchPattern.Batchid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OvenDB.HeatingType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HeatingType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SetPoint1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SetPoint2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Interval1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Interval2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Interval3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalHeatTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tolerance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dummyname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_overrided)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.overrideid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_dummy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.manual)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.BatchID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.BatchID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.BatchID })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,432 @@
+﻿@model IEnumerable<Oven.Models.HeatingBatch>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <img src="~/Images/logo_Infineon.png" style="margin:10px 10px;" />
+    </div>
+    <div class="col-md-6">
+        <h2 id="judul">Chart History</h2>
+    </div>
+    <div class="col-md-3" style="text-align:right; padding-top:20px;">
+        <p>
+            @DateTime.Now.DayOfWeek, @DateTime.Now.Day / @DateTime.Now.Month / @DateTime.Now.Year
+        </p>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <table class="table table-history">
+            <tr>
+                <td>Start Date</td>
+                <td>
+                    <input type="text" id="txtstartDate">
+                </td>
+            </tr>
+            <tr>
+                <td>End Date</td>
+                <td>
+                    <input type="text" id="txtendDate">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table table-history">
+            <tr>
+                <td>Oven ID</td>
+                <td>
+                    <input type="text" id="inp-ovenID">
+                </td>
+            </tr>
+            <tr>
+                <td>Batch ID</td>
+                <td>
+                    <input type="text" id="inp-batchID">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table table-history">
+            <tr>
+                <td>Lot Number</td>
+                <td>
+                    <input type="text" id="inp-lot">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="btn-reset" class="btn btn-default" style="width:130px;"><span class="glyphicon glyphicon-trash"></span> Reset Form</button>
+                </td>
+                <td>
+                    <button id="btn-search" class="btn btn-primary" style="width:180px;"><span class="glyphicon glyphicon-search"></span> Search</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div id="cariGrid" class="row">
+    <div class="col-md-12">
+        <table id="tblHasilSearchLot" class="table table-bordered" style="display:none;">
+            <thead>
+                <tr>
+                    <td>No.</td>
+                    <td>Batch ID</td>
+                    <td>Device</td>
+                    <td>Package</td>
+                    <td>Lot Number</td>
+                    <td>Qty</td>
+                </tr>
+            </thead>
+            <tbody>
+        </table>
+        <table id="tblHasilSearch" class="table table-bordered" style="display:none;">
+            <thead>
+                <tr>
+                    <td>No.</td>
+                    <td>Oven ID</td>
+                    <td>Batch ID</td>
+                    <td>Status</td>
+                    <td>Start Date</td>
+                    <td>End Date</td>
+                    <td>Chart</td>
+                </tr>
+            </thead>
+            <tbody>
+        </table>
+        <p id="pError" style="display:none; color:red;"></p>
+    </div>
+</div>
+<div id="cariSingle" class="row">
+    <div class="col-md-12" style="text-align:center;">
+        <div id="chartdiv" style="height:550px; margin:15px auto;"></div>
+        <button type="button" class="btn btn-primary button-back"><span class="glyphicon glyphicon-chevron-left"></span> BACK</button>
+    </div>
+</div>
+
+<hr />
+
+<style type="text/css">
+    .table-history td{
+        border: none !important;
+    }
+    .ui-datepicker-trigger{
+        border:none !important;
+        background:#fff !important;
+    }
+    .rowBatchID:hover{
+        background:#d4e8ea;
+        color:#fff;
+        cursor:pointer;
+    }
+</style>
+
+@section Scripts{
+    <script type="text/javascript" language="javascript">
+        var start_th, start_mn, start_dt = "";
+        var end_th, end_mn, end_dt = "";
+        $(function () {
+            $('#txtstartDate').datepicker({
+                minDate: -90,
+                maxDate: "+60D",
+                numberOfMonths: 2,
+                onSelect: function (selected) {
+                    $("#txtendDate").datepicker("option","minDate", selected)
+                }
+            });
+            $('#txtendDate').datepicker({
+                minDate: -90,
+                maxDate: "+60D",
+                numberOfMonths: 2,
+                onSelect: function (selected) {
+                    $("#txtstartDate").datepicker("option", "maxDate", selected)
+                }
+            });
+        });
+        $('#btn-reset').click(function () {
+            var _startDate = ""
+            var _endDate = ""
+            var _batchID = 0;
+            var _ovenID = "";
+            var _lotnum = "";
+        });
+        
+        $('#btn-search').click(function () {
+            var _startDate = ""
+            var _endDate = ""
+            var _batchID = 0;
+            var _ovenID = "";
+            var _lotnum = "";
+
+            if ($("#inp-lot").val() != "") {
+                _lotnum = $("#inp-lot").val();
+                _startDate = ""
+                _endDate = ""
+                _batchID = 0;
+                _ovenID = "";
+
+                //general search
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetLot", "BatchLOTs")',
+                    contentType: "application/json; charset=utf-8",
+                    async: false,
+                    data: {
+                        lotNumber: _lotnum
+                    },
+                    dataType: "json",
+                    success: function (hasil) {
+                        console.log(hasil);
+                        var arr = [];
+                        for (var y in hasil) {
+                            arr.push(hasil[y]);
+                        }
+                        if (arr.length < 1) {
+                            $("#pError").show();
+                            $("#pError").text("Maaf, data Lot Number # " + _lotnum + " tidak ada di database...!");
+                        } else {
+                            $('#tblHasilSearchLot tbody').empty();
+                            $('#tblHasilSearchLot').show();
+                            for (var i = 0; i < arr.length; i++) {
+                                $('#tblHasilSearchLot').append('<tr><td>'
+                                    + (i + 1) + '</td><td>'
+                                    + arr[i].batchid + '</td><td>'
+                                    + arr[i].device + '</td><td>'
+                                    + arr[i].package + '</td><td>'
+                                    + arr[i].lotnumber + '</td><td>'
+                                    + arr[i].qty + '</td><td>'
+                                    + ' <span class="btn btn-primary btnSingle" data="' + arr[i].batchid + '">View Chart</span></td></tr>');
+                            };
+                            $('#tblHasilSearch').append('</tbody');
+                            $('#tblHasilSearchLot').addClass('table-striped');
+                            $('#tblHasilSearchLot').addClass('table-condensed');
+
+                            $('#tblHasilSearch').dataTable();
+
+                            $('.btnSingle').click(function () {
+                                $('#cariGrid').hide();
+                                var x = $('.btnSingle').attr("data");
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetBatchTemperature", "BatchTemperatures")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: { "batchID": x },
+                                    dataType: "json",
+                                    success: function (hasil) {
+                                        var obj = hasil.data;
+                                        var arr2 = [];
+
+                                        for (var i = 0; i < obj.length; i++) {
+                                            arr2.push([obj[i].FetchTime / 60, obj[i].Temperature]); //FetchTime = detik, dibagi 60 supaya jadi menit dan dibulatkan (roun-up)
+                                        };
+
+                                        //console.log(arr2);
+
+                                        var xmin = 0;
+                                        var xmax = 450;
+                                        var ymax = 200;
+
+                                        var arr = [];
+                                        var ucl = [];
+                                        var lcl = [];
+                                        var tgt = [];
+
+                                        //hardcode ucl, lcl dan target
+                                        ucl = [[xmin - 5, 185], [xmax + 5, 185]]
+                                        lcl = [[xmin - 5, 165], [xmax + 5, 165]]
+                                        tgt = [[xmin - 5, 175], [xmax + 5, 175]]
+
+                                        //label/legend series
+                                        var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
+                                        var plot1 = $.jqplot('chartdiv', [arr2, ucl, tgt, lcl], {
+                                            seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557"],
+
+                                            axesDefaults: {
+                                                labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
+                                                tickOptions: {
+                                                    formatString: '%d'
+                                                },
+                                                labelOptions: {
+                                                    fontFamily: 'Georgia, Serif', fontSize: '8pt', color: '#fff'
+                                                }
+                                            },
+                                            axes: {
+                                                xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
+                                                yaxis: { min: xmin, max: ymax, label: 'Temperature(C)' }
+                                            },
+                                            seriesDefaults: {
+                                                shadow: false,
+                                                trendline: { show: true, color: '#006600', label: '', type: 'exp', lineWidth: 1.5 },
+                                                markerOptions: { show: false, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699' },
+                                            },
+                                            grid: {
+                                                drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff', borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
+                                            },
+                                            legend: {
+                                                show: true, location: 'e', labels: seriesLabel,
+                                            },
+                                            highlighter: { show: true, sizeAdjust: 7.5 },
+                                            cursor: { show: true, zoom: true, showTooltip: true }
+                                        });
+                                        plot1.replot();
+
+                                        //buat judul chart
+                                        $("#pERROR").text("BatchID : " + x);
+                                        //tampilkan tombol reset zoom
+                                        plot.replot();
+                                    },
+                                    error: function () { alert('Error generate chart..!'); }
+                                }); //End create chart*/
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error eksekusi');
+                    }
+                });
+            } else {
+                if ($("#txtstartDate").val() != "") {
+                    _startDate = $("#txtstartDate").val().toString();
+                } else {
+                    _startDate = null;
+                    console.log("start : " + _startDate);
+                }
+
+                if ($("#txtendDate").val() != "") {
+                    _startDate = $("#txtendDate").val().toString();
+                } else {
+                    _endDate = null;
+                    _endDate = $("#txtendDate").val().toString();
+                    console.log("End : " + _endDate);
+                }
+                //general search
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetHeatingBatches", "HeatingBatches")',
+                    contentType: "application/json; charset=utf-8",
+                    async: false,
+                    data: {
+                        startDate: _startDate,
+                        endDate: _endDate,
+                        batchid: _batchID,
+                        ovenid: _ovenID
+                    },
+                    dataType: "json",
+                    success: function (hasil) {
+                        var arr = [];
+                        for (var y in hasil) {
+                            arr.push(hasil[y]);
+                        }
+                        if (arr.length < 1001) {
+                            $('#tblHasilSearch').show();
+                            for (var i = 0; i < arr.length; i++) {
+                                $('#tblHasilSearch').append('<tr><td>'
+                                    + (i + 1) + '</td><td>'
+                                    + arr[i].BatchID + '</td><td>'
+                                    + arr[i].OvenID + '</td><td>'
+                                    + arr[i].Status + '</td><td>'
+                                    + arr[i].StartDate + '</td><td>'
+                                    + arr[i].EndDate + '</td><td>'
+                                    + ' <span class="btn btn-primary btnSingle" data="' + arr[i].BatchID + '">View Chart</span></td></tr>');
+                            };
+                            $('#tblHasilSearch').append('</tbody');
+                            $('#tblHasilSearch').addClass('table-striped');
+                            $('#tblHasilSearch').addClass('table-condensed');
+
+                            $('#tblHasilSearch').dataTable();
+
+                            $('.btnSingle').click(function () {
+                                $('#cariGrid').hide();
+                                var x = $('.btnSingle').attr("data");
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetBatchTemperature", "BatchTemperatures")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: { "batchID": x },
+                                    dataType: "json",
+                                    success: function (hasil) {
+                                        var obj = hasil.data;
+                                        var arr2 = [];
+
+                                        for (var i = 0; i < obj.length; i++) {
+                                            arr2.push([obj[i].FetchTime / 60, obj[i].Temperature]); //FetchTime = detik, dibagi 60 supaya jadi menit dan dibulatkan (roun-up)
+                                        };
+
+                                        //console.log(arr2);
+
+                                        var xmin = 0;
+                                        var xmax = 450;
+                                        var ymax = 200;
+
+                                        var arr = [];
+                                        var ucl = [];
+                                        var lcl = [];
+                                        var tgt = [];
+
+                                        //hardcode ucl, lcl dan target
+                                        ucl = [[xmin - 5, 185], [xmax + 5, 185]]
+                                        lcl = [[xmin - 5, 165], [xmax + 5, 165]]
+                                        tgt = [[xmin - 5, 175], [xmax + 5, 175]]
+
+                                        //label/legend series
+                                        var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
+                                        var plot1 = $.jqplot('chartdiv', [arr2, ucl, tgt, lcl], {
+                                            seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557"],
+
+                                            axesDefaults: {
+                                                labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
+                                                tickOptions: {
+                                                    formatString: '%d'
+                                                },
+                                                labelOptions: {
+                                                    fontFamily: 'Georgia, Serif', fontSize: '8pt', color: '#fff'
+                                                }
+                                            },
+                                            axes: {
+                                                xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
+                                                yaxis: { min: xmin, max: ymax, label: 'Temperature(C)' }
+                                            },
+                                            seriesDefaults: {
+                                                shadow: false,
+                                                trendline: { show: true, color: '#006600', label: '', type: 'exp', lineWidth: 1.5 },
+                                                markerOptions: { show: false, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699' },
+                                            },
+                                            grid: {
+                                                drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff', borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
+                                            },
+                                            legend: {
+                                                show: true, location: 'e', labels: seriesLabel,
+                                            },
+                                            highlighter: { show: true, sizeAdjust: 7.5 },
+                                            cursor: { show: true, zoom: true, showTooltip: true }
+                                        });
+                                        plot1.replot();
+
+                                        //buat judul chart
+                                        $("#judul").text("BatchID : " + x);
+                                        //tampilkan tombol reset zoom
+                                        plot.replot();
+                                    },
+                                    error: function () { alert('Error generate chart..!'); }
+                                }); //End create chart*/
+                            });
+                        } else {
+                            $("#pError").show();
+                            $("#pError").text("Jumlah data hasil pencarian melebihi 1.000 record !, mohon dipersempit filternya dengan rentang waktu (tanggal) atau nomor Oven");
+                        };
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error eksekusi');
+                    }
+                });
+            };         
+        });
+    </script>
+}

@@ -1,0 +1,74 @@
+﻿@model Oven.Models.BatchLOT
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BatchLOT</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.batchid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.batchid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.device)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.device)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.package)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.package)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lotnumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lotnumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.loaded_by)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.loaded_by)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

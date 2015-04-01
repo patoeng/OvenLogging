@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Oven.Models.HeatingBatch>
+
+@{
+    ViewBag.Title = "Graph";
+}
+
+<h2>Graph</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+         <p>Last Status:<br />@Html.DisplayFor(modelItem => item.StartDate)</p>
+    }
+</div>

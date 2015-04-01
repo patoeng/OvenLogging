@@ -1,0 +1,375 @@
+﻿@model IEnumerable<Oven.Models.OvenDB>
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+
+<div class="row">
+    <div class="col-md-3">
+        <img src="~/Images/logo_Infineon.png" style="margin:10px 10px;"/>
+    </div>
+    <div class="col-md-6">
+        <h2 id="judul">Oven Monitoring</h2>
+    </div>
+    <div class="col-md-3" style="text-align:right; padding-top:20px;">
+        <p>
+            @DateTime.Now.DayOfWeek, @DateTime.Now.Day / @DateTime.Now.Month / @DateTime.Now.Year [LW2214]
+            <!-- <br />
+            PM Due : 
+            <br/>
+            PM Next : LW2314-->
+        </p>
+    </div>
+</div>
+
+<div class="row" id="rowHome">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3">
+            <div id="@item.OvenID" class="hOven">
+                <h3>@Html.DisplayFor(modelItem => item.OvenID)</h3>
+                <p id="@item.OvenID">Status : STOP</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="rowSingle" class="row" style="display:none;">
+    <div class="col-md-12">
+        <div id="chartdiv" style="height:550px; margin:15px auto;"></div>
+        <div class="backDiv" style="text-align:center;">
+            <button type="button" class="btn btn-primary button-back"><span class="glyphicon glyphicon-chevron-left"></span> BACK</button>
+        </div>
+        <!-- <button class="btn btn-default button-reset">Reset Zoom</button>-->
+        <hr />
+        <div class="row">
+            <!-- start Lot Info -->
+            <div class="col-md-12">
+                <h2 style="padding-top:0px; margin-top:0px; padding-bottom:10px;">Lots Information :</h2>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary btnAddLot"><span class="glyphicon glyphicon-plus-sign"></span> Add Lot</button>
+            </div>
+            <div id="divLot" class="col-md-8" style="display:none;">
+                <div class="row">
+                    <label for="txtLotNum" class="col-sm-2 control-label">Lot Number</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="txtLotNum" placeholder="Lot Number">
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-info "><span class="glyphicon glyphicon-floppy-save"></span> Save Lot</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="lotGrid" class="row">
+            <div class="col-md-12" style="margin-top:15px;">
+                <table id="tblLot" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>No.</td>
+                            <td>Oven ID</td>
+                            <td>Batch ID</td>
+                            <td>Status</td>
+                            <td>Start Date</td>
+                            <td>End Date</td>
+                            <td>Chart</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <!-- Start Batch Info-->
+            <div class="col-md-12">
+                <h2 style="padding-top:0px; margin-top:0px; padding-bottom:10px;">Batch Information :</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <label for="inputLotNum" class="col-sm-5 control-label">Production Chart</label>
+                            <div class="btn-group col-md-7" data-toggle="buttons">
+                                <label class="btn btn-primary" style="margin-left:10px;">
+                                    <input type="radio" name="options" id="option1"> YES
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input type="radio" name="options" id="option2"> NO
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputRemark" class="col-sm-4 control-label">Remark</label>
+                        <div class="col-md-8">
+                            <textarea class="form-control" rows="3" placeholder="Remark"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <label for="inputUser" class="col-sm-4 control-label">Confirmed by</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputUser" placeholder="user">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- END Batch Indfo -->
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script type="text/javascript" language="javascript">
+        $('.button-reset').hide();
+        $('.button-back').hide();
+        // ========================Home=================================
+        
+        $(function homeDashboard() {
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDaftarOven", "Dashboard")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (ov) {
+                    var ovlist = [];                  
+                    //console.log("Oven ID = " + ov);
+                    for (var x in ov) {
+                        ovlist.push(ov[x]);
+                    }
+                    var arr = [];
+                    for (var i = 0; i < 16; i++) {
+                        var target = ovlist[i];
+
+                        //get heating batch
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("GetHeatingBatch", "Dashboard")',
+                            contentType: "application/json; charset=utf-8",
+                            data: { "ovenid": target },
+                            dataType: "json",
+                            async: false,
+                            success: function (hb) {
+                                var hbx = [];
+                                for (var y in hb) {
+                                    hbx.push(hb[y]);
+                                }
+                                console.log(hbx);
+
+                                console.log("Oven " + ovlist[i]);
+                                console.log("Batch " + hbx[0]);
+                                console.log("Status " + hbx[1]);
+                                console.log("Start " + hbx[2]);
+                                console.log("End " + hbx[2]);
+
+                                var ovn = "#" + ovlist[i];
+                                var stat = hbx[1];
+                                console.log(ovn);
+                                
+                                $('p' + ovn).text("Status : " + stat);
+                                $('div' + ovn).addClass(stat);
+
+                            },
+
+                            error: function () {
+                                console.log('Error ambil BatchID');
+                            },
+                        });
+
+                    };
+                }
+            });
+        });
+
+
+        //$('.button-reset').hide();
+
+        // =================== CHART on CLICK event ========================
+        //define vareable support chart
+        //harcode Min Max canvas
+        var xmin = 0;
+        var xmax = 450;
+        var ymax = 200;
+
+        var arr = [];
+        var ucl = [];
+        var lcl = [];
+        var tgt = [];
+
+        //hardcode ucl, lcl dan target
+        ucl = [[xmin - 5, 185], [xmax + 5, 185]]
+        lcl = [[xmin - 5, 165], [xmax + 5, 165]]
+        tgt = [[xmin - 5, 175], [xmax + 5, 175]]
+
+        //label/legend series
+        var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
+        $('.button-back').click(function () {
+            //$('#chartdiv').hide();
+            $('#rowHome').show("slide", { direction: "right" }, 500);
+            //$('.button-reset').hide();
+            $(this).hide();
+            $('#rowSingle').hide();
+        });
+        $('.btnAddLot').click(function () {
+            $('#divLot').show();
+        });
+        $(".hOven").click(function () {
+            $('#rowHome').hide(); // hide dashboard
+            $('#rowSingle').show(); // show div chart
+
+            // load blank chart dulu
+            blankChart();
+            //$('.button-reset').show();
+            $('.button-back').show();
+            //$('.button-reset').click(function () { plot1.resetZoom() });
+
+            //next olah data dan tampilkan ke chart
+            var start = new Date().getTime();
+
+            var hid = $(this).attr('id');
+
+            //Get BatchID from OvenID
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetHeatingBatch", "Dashboard")',
+                contentType: "application/json; charset=utf-8",
+                data: { "ovenid": hid },
+                dataType: "json",
+                success: function (hb) {
+                    var hbx = [];
+
+                    for (var x in hb) {
+                        hbx.push(hb[x]);
+                    }
+                    blankChart();
+
+                    var x = hbx[0];
+
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetBatchTemperature", "BatchTemperatures")',
+                        contentType: "application/json; charset=utf-8",
+                        data: { "batchID": x },
+                        dataType: "json",
+                        success: function (hasil) {
+                            var obj = hasil.data;
+                            var arr = [];
+                            for (var i = 0; i < obj.length; i++) {
+                                arr.push([obj[i].FetchTime / 60, obj[i].Temperature]); //FetchTime = detik, dibagi 60 supaya jadi menit dan dibulatkan (roun-up)
+                            };
+
+                            console.log(arr);
+
+                            var plot1 = $.jqplot('chartdiv', [arr, ucl, tgt, lcl], {
+                                seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557"],
+
+                                axesDefaults: {
+                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
+                                    tickOptions: {
+                                        formatString: '%d'
+                                    },
+                                    labelOptions: {
+                                        fontFamily: 'Georgia, Serif', fontSize: '8pt', color: '#fff'
+                                    }
+                                },
+                                axes: {
+                                    xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
+                                    yaxis: { min: xmin, max: ymax, label: 'Temperature(C)' }
+                                },
+                                seriesDefaults: {
+                                    shadow: false,
+                                    trendline: { show: true, color: '#006600', label: '', type: 'exp', lineWidth: 1.5 },
+                                    markerOptions: { show: false, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699' },
+                                },
+                                grid: {
+                                    drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff', borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
+                                },
+                                legend: {
+                                    show: true, location: 'e', labels: seriesLabel,
+                                },
+                                highlighter: { show: true, sizeAdjust: 7.5 },
+                                cursor: { show: true, zoom: true, showTooltip: true }
+                            });
+                            plot1.replot();
+
+                            //buat judul chart
+                            $("#judul").text("Oven " + hid + " BatchID : " + x);
+                            //tampilkan tombol reset zoom
+                        },
+                        error: function () { alert('Error generate chart..!'); }
+                    }); //End create chart
+                },
+                error: function () {
+                    console.log('Error ambil BatchID');
+                },
+            });
+        });
+
+        //KeyPress ENTER
+        
+        $('#txtLotNum').keydown(function (e) {
+            var xx = $('#txtLotNum').val();
+            if(e.keyCode == 13){
+                alert(xx);
+            }
+        })
+
+        //=============================== blank chart function ===============================================
+        var blankdata = [0, 0];
+        var blankChart = function () {
+            var plot1 = $.jqplot('chartdiv', [blankdata, ucl, tgt, lcl], {
+                seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557", "#958c12",
+                        "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],
+                axesDefaults: {
+                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
+                    tickOptions: {
+                        formatString: '%d'
+                    },
+                    labelOptions: {
+                        fontFamily: 'Georgia, Serif', fontSize: '8pt', color: '#fff'
+                    }
+                },
+                axes: {
+                    xaxis: {
+                        min: xmin,
+                        max: xmax,
+                        label: 'Time (Minutes)'
+                    },
+                    yaxis: {
+                        min: xmin,
+                        max: ymax,
+                        label: 'Temperature(C)'
+                    }
+                },
+                seriesDefaults: {
+                    shadow: false,
+                    trendline: {
+                        show: true, color: '#006600', label: '', type: 'linear', lineWidth: 1.5
+                    },
+                    markerOptions: {
+                        show: true, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699'
+                    },
+                },
+                grid: {
+                    drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff',
+                    borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
+                },
+                legend: {
+                    show: true, location: 'e', labels: seriesLabel,
+                },
+                highlighter: {
+                    show: true, sizeAdjust: 7.5
+                },
+                cursor: {
+                    show: true, zoom: true, showTooltip: true
+                }
+            });
+            plot1.replot();
+        };
+
+   </script>
+}

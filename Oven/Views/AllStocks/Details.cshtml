@@ -1,0 +1,74 @@
+﻿@model Oven.Models.AllStock
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AllStock</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.process_class)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.process_class)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.product_type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.product_type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.operation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.operation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.equipment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.equipment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.facility)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.facility)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
