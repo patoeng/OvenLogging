@@ -12,7 +12,6 @@ namespace Oven.Models
     {
         [Key]
         public int id { get; set; }
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BatchID { get; set; }
         public int? FetchTime { get; set; }
