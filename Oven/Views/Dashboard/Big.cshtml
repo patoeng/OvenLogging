@@ -22,11 +22,11 @@
 </div>
 
 
-<div class="row" id="single">
+<div class="row" id="rowHome">
     @foreach (var item in Model)
     {
-        <div class="col-md-12">
-            <div id="single-page" style="height:900px; width:100%;">
+        <div class="col-md-3">
+            <div id="@item.OvenID" style="height:220px; width:100%;" class="box">
             </div>
         </div>
     }
@@ -92,8 +92,8 @@
 
         // get daftar oven
         $('#judul').hide();
-
-        $(function chartDashboard() {
+        chartDashboard();
+        function chartDashboard() {
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("GetDaftarOven", "Dashboard")',
@@ -154,7 +154,7 @@
                                         for (var i = 0; i < obj.length; i++) {
                                             arr.push([obj[i].FetchTime / 60, obj[i].Temperature]); //FetchTime = detik, dibagi 60 supaya jadi menit dan dibulatkan (roun-up)
                                         };
-                                        console.log("Lenght : " + obj.length);
+                                        console.log("Length : " + obj.length);
 
                                         if (obj.length > 1) {
                                             $.jqplot(target, [arr, ucl, tgt, lcl], {
@@ -264,7 +264,8 @@
                     console.log(arrOvenBatch);
                 }
             });
-        });
+            setTimeout(chartDashboard, 15000);
+        }
 
 
         // =================== BLINKING BACKGROUND COLOUR ==================
@@ -304,7 +305,7 @@
                     for (var x in hb) {
                         hbx.push(hb[x]);
                     }
-                    target = "single-page";
+                    target2 = 'single-page';
                     blankChart();
 
                     var x = hbx[0];
@@ -371,7 +372,7 @@
                                 }).replot(); //End create chart
                             } // end if
                             else {
-                                alert("Data tidak tersedia untuk Batch# : " + x)
+                                alert("Data tidak tersedia untuk Batch# : " + x);
                             }
                         },
                         error: function () {
@@ -381,7 +382,7 @@
                 },
                 error: function () {
                     console.log('Error ambil BatchID');
-                },
+                }
             });
         });
 
@@ -390,15 +391,21 @@
         var blankdata = [0, 0];
         var blankChart = function () {
             $.jqplot(target, [blankdata, ucl, tgt, lcl], {
-                seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557", "#958c12",
-                        "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],
+                seriesColors: [
+                    "#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557", "#958c12",
+                    "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"
+                ],
                 axesDefaults: {
-                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
+                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                    tickInterval: 10,
+                    showTickMarks: false,
                     tickOptions: {
                         formatString: '%d'
                     },
                     labelOptions: {
-                        fontFamily: 'Georgia, Serif', fontSize: '8pt', color: '#fff'
+                        fontFamily: 'Georgia, Serif',
+                        fontSize: '8pt',
+                        color: '#fff'
                     }
                 },
                 axes: {
@@ -416,26 +423,43 @@
                 seriesDefaults: {
                     shadow: false,
                     trendline: {
-                        show: true, color: '#006600', label: '', type: 'linear', lineWidth: 1.5
+                        show: true,
+                        color: '#006600',
+                        label: '',
+                        type: 'linear',
+                        lineWidth: 1.5
                     },
                     markerOptions: {
-                        show: true, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699'
+                        show: true,
+                        style: 'filledCircle',
+                        lineWidth: 1,
+                        size: 1,
+                        color: '#336699'
                     },
                 },
                 grid: {
-                    drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff',
-                    borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
+                    drawGridLines: true,
+                    gridLineColor: '#ccc',
+                    background: '#fff',
+                    borderColor: '#fff',
+                    borderWidth: 1.0,
+                    renderer: $.jqplot.CanvasGridRenderer
                 },
                 legend: {
-                    show: true, location: 'e', labels: seriesLabel,
+                    show: true,
+                    location: 'e',
+                    labels: seriesLabel,
                 },
                 highlighter: {
-                    show: true, sizeAdjust: 7.5
+                    show: true,
+                    sizeAdjust: 7.5
                 },
                 cursor: {
-                    show: true, zoom: true, showTooltip: true
+                    show: true,
+                    zoom: true,
+                    showTooltip: true
                 }
-            })
+            });
         };
 
     </script>

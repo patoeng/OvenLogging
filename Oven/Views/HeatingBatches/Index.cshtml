@@ -136,7 +136,7 @@
                 maxDate: "+60D",
                 numberOfMonths: 2,
                 onSelect: function (selected) {
-                    $("#txtendDate").datepicker("option","minDate", selected)
+                    $("#txtendDate").datepicker("option", "minDate", selected);
                 }
             });
             $('#txtendDate').datepicker({
@@ -144,29 +144,29 @@
                 maxDate: "+60D",
                 numberOfMonths: 2,
                 onSelect: function (selected) {
-                    $("#txtstartDate").datepicker("option", "maxDate", selected)
+                    $("#txtstartDate").datepicker("option", "maxDate", selected);
                 }
             });
         });
         $('#btn-reset').click(function () {
-            var _startDate = ""
-            var _endDate = ""
+            var _startDate = "";
+            var _endDate = "";
             var _batchID = 0;
             var _ovenID = "";
             var _lotnum = "";
         });
         
         $('#btn-search').click(function () {
-            var _startDate = ""
-            var _endDate = ""
+            var _startDate = "";
+            var _endDate = "";
             var _batchID = 0;
             var _ovenID = "";
             var _lotnum = "";
 
             if ($("#inp-lot").val() != "") {
                 _lotnum = $("#inp-lot").val();
-                _startDate = ""
-                _endDate = ""
+                _startDate = "";
+                _endDate = "";
                 _batchID = 0;
                 _ovenID = "";
 
@@ -238,9 +238,9 @@
                                         var tgt = [];
 
                                         //hardcode ucl, lcl dan target
-                                        ucl = [[xmin - 5, 185], [xmax + 5, 185]]
-                                        lcl = [[xmin - 5, 165], [xmax + 5, 165]]
-                                        tgt = [[xmin - 5, 175], [xmax + 5, 175]]
+                                        ucl = [[xmin - 5, 185], [xmax + 5, 185]];
+                                        lcl = [[xmin - 5, 165], [xmax + 5, 165]];
+                                        tgt = [[xmin - 5, 175], [xmax + 5, 175]];
 
                                         //label/legend series
                                         var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
@@ -269,7 +269,7 @@
                                                 drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff', borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
                                             },
                                             legend: {
-                                                show: true, location: 'e', labels: seriesLabel,
+                                                show: true, location: 'e', labels: seriesLabel
                                             },
                                             highlighter: { show: true, sizeAdjust: 7.5 },
                                             cursor: { show: true, zoom: true, showTooltip: true }
@@ -295,7 +295,7 @@
                     _startDate = $("#txtstartDate").val().toString();
                 } else {
                     _startDate = null;
-                    console.log("start : " + _startDate);
+                    
                 }
 
                 if ($("#txtendDate").val() != "") {

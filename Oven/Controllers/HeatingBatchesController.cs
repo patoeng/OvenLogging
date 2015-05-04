@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -26,22 +27,25 @@ namespace Oven.Controllers
             return View(heatingBatches);
         }
         public ActionResult GetHeatingBatches(string startDate, string endDate, string ovenID, int batchID)
-        {         
+        {
             var heatingBatches = from h in db.HeatingBatches
-                                 select new
-                                 {
-                                     h.BatchID,
-                                     h.OvenID,
-                                     h.Status,
-                                     h.StartDate,
-                                     h.EndDate,
-                                 };
+                select new
+                {
+                    h.BatchID,
+                    h.OvenID,
+                    h.Status,
+                    h.StartDate,
+                    h.EndDate,
+                };
+
+
             DateTime sDate;
             DateTime eDate;
               if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
             {
                 sDate = DateTime.Parse(startDate);
                 eDate = DateTime.Parse(endDate);   
+                 // Debug.WriteLine(sDate.ToString());
                 heatingBatches = heatingBatches.Where(h => h.StartDate >= sDate && h.EndDate <= eDate);
             };
 
@@ -71,8 +75,7 @@ namespace Oven.Controllers
                          };
 
             var batchs2 = batchs.ToArray();
-            var j = new Dictionary<string, Array>();
-            j.Add("data", batchs2);
+            var j = new Dictionary<string, Array> {{"data", batchs2}};
 
             return Json(j, JsonRequestBehavior.AllowGet);
         }

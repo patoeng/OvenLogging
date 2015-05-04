@@ -35,7 +35,7 @@
     }
 </div>
 
-<div id="rowSingle" class="row" style="display:none;">
+<div id="rowSingle" class="row" style="display:none; ">
     <div class="col-md-12">
         <div id="chartdiv" style="height:550px; margin:15px auto;"></div>
         <div class="backDiv" style="text-align:center;">
@@ -43,7 +43,7 @@
         </div>
         <!-- <button class="btn btn-default button-reset">Reset Zoom</button>-->
         <hr />
-        <div class="row">
+        <div class="row" style="visibility: hidden;">
             <!-- start Lot Info -->
             <div class="col-md-12">
                 <h2 style="padding-top:0px; margin-top:0px; padding-bottom:10px;">Lots Information :</h2>
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div id="lotGrid" class="row">
+        <div id="lotGrid" class="row" style="visibility: hidden">
             <div class="col-md-12" style="margin-top:15px;">
                 <table id="tblLot" class="table table-bordered">
                     <thead>
@@ -81,7 +81,7 @@
             </div>
         </div>
         <hr />
-        <div class="row">
+        <div class="row" style="visibility: hidden">
             <!-- Start Batch Info-->
             <div class="col-md-12">
                 <h2 style="padding-top:0px; margin-top:0px; padding-bottom:10px;">Batch Information :</h2>
@@ -126,8 +126,9 @@
         $('.button-reset').hide();
         $('.button-back').hide();
         // ========================Home=================================
-        
-        $(function homeDashboard() {
+        var TimeOut;
+        homeDashboard();
+        function homeDashboard() {
 
             $.ajax({
                 type: "GET",
@@ -177,13 +178,14 @@
 
                             error: function () {
                                 console.log('Error ambil BatchID');
-                            },
+                            }
                         });
 
                     };
                 }
             });
-        });
+           TimeOut= setTimeout(homeDashboard, 15000);
+        };
 
 
         //$('.button-reset').hide();
@@ -210,6 +212,7 @@
         $('.button-back').click(function () {
             //$('#chartdiv').hide();
             $('#rowHome').show("slide", { direction: "right" }, 500);
+            TimeOut = setTimeout(homeDashboard, 15000);
             //$('.button-reset').hide();
             $(this).hide();
             $('#rowSingle').hide();
@@ -220,7 +223,7 @@
         $(".hOven").click(function () {
             $('#rowHome').hide(); // hide dashboard
             $('#rowSingle').show(); // show div chart
-
+            clearTimeout(TimeOut);
             // load blank chart dulu
             blankChart();
             //$('.button-reset').show();
