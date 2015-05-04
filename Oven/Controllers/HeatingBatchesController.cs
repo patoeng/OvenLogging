@@ -28,17 +28,13 @@ namespace Oven.Controllers
         }
         public ActionResult GetHeatingBatches(string startDate, string endDate, string ovenID, int batchID)
         {
-            DateTime sDate = DateTime.Parse("2014-05-05");// DateTime.Now;
-            DateTime eDate = DateTime.Parse("2014-06-05"); //DateTime.Now;
-            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
-            {
-                sDate = DateTime.Parse(startDate);
-                eDate = DateTime.Parse(endDate);
-                // Debug.WriteLine(sDate.ToString());
-                
-            };
+            DateTime sDate = startDate==string.Empty?DateTime.Now : DateTime.Parse(startDate);
+            DateTime eDate = endDate == string.Empty ? DateTime.Now : DateTime.Parse(endDate);
+           
             var heatingBatches = from h in db.HeatingBatches
-                                 .Where(h=> h.StartDate >= sDate && h.StartDate<= eDate)
+                                 .Where(h=> (h.StartDate >= sDate) && (h.StartDate<= eDate)
+                                         && (h.OvenID == ovenID || ovenID == string.Empty)
+                                         && (h.BatchID == batchID || batchID == 0))                                
                                  orderby h.BatchID descending 
                 select new
                 {
@@ -48,27 +44,6 @@ namespace Oven.Controllers
                     h.StartDate,
                     h.EndDate
                 };
-
-
-           
-            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
-            {
-                sDate = DateTime.Parse(startDate);
-                eDate = DateTime.Parse(endDate);   
-                 // Debug.WriteLine(sDate.ToString());
-                heatingBatches = heatingBatches.Where(h => (h.StartDate >= sDate) && (h.EndDate <= eDate));
-            };
-
-            if (!string.IsNullOrEmpty(ovenID))
-            {
-                heatingBatches = heatingBatches.Where(h => h.OvenID.Equals(ovenID));
-            };
-
-            if (batchID > 0)
-            {
-                heatingBatches = heatingBatches.Where(h => h.BatchID.Equals(batchID));
-            };
-
             return Json(heatingBatches, JsonRequestBehavior.AllowGet);
         }
 
