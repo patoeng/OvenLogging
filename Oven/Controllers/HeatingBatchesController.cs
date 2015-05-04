@@ -28,25 +28,35 @@ namespace Oven.Controllers
         }
         public ActionResult GetHeatingBatches(string startDate, string endDate, string ovenID, int batchID)
         {
+            DateTime sDate = DateTime.Parse("2014-05-05");// DateTime.Now;
+            DateTime eDate = DateTime.Parse("2014-06-05"); //DateTime.Now;
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                sDate = DateTime.Parse(startDate);
+                eDate = DateTime.Parse(endDate);
+                // Debug.WriteLine(sDate.ToString());
+                
+            };
             var heatingBatches = from h in db.HeatingBatches
+                                 .Where(h=> h.StartDate >= sDate && h.StartDate<= eDate)
+                                 orderby h.BatchID descending 
                 select new
                 {
                     h.BatchID,
                     h.OvenID,
                     h.Status,
                     h.StartDate,
-                    h.EndDate,
+                    h.EndDate
                 };
 
 
-            DateTime sDate;
-            DateTime eDate;
-              if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+           
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
             {
                 sDate = DateTime.Parse(startDate);
                 eDate = DateTime.Parse(endDate);   
                  // Debug.WriteLine(sDate.ToString());
-                heatingBatches = heatingBatches.Where(h => h.StartDate >= sDate && h.EndDate <= eDate);
+                heatingBatches = heatingBatches.Where(h => (h.StartDate >= sDate) && (h.EndDate <= eDate));
             };
 
             if (!string.IsNullOrEmpty(ovenID))
