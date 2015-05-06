@@ -161,7 +161,7 @@
                             },
 
                             error: function() {
-                                console.log('Error ambil BatchID');
+                                //console.log('Error ambil BatchID');
                             }
                         });
 
@@ -192,7 +192,7 @@
         tgt = [[xmin - 5, 175], [xmax + 5, 175]];
 
         //label/legend series
-        var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
+        var seriesLabel = [ 'UCL', 'Target', 'LCL', 'Actual'];
         $('.button-back').click(function() {
             //$('#chartdiv').hide();
             $('#rowHome').show("slide", { direction: "right" }, 500);
@@ -249,7 +249,7 @@
                                     arr.push([obj[i].FetchTime / 60, obj[i].Temperature]); //FetchTime = detik, dibagi 60 supaya jadi menit dan dibulatkan (roun-up)
                                 };
 
-                                console.log(arr);
+                               // console.log(arr);
 
                                 var plot1 = $.jqplot('chartdiv', [ucl, tgt, lcl, arr], {
                                     seriesColors: [ "#cc00cc","#6699cc", "#ff0000", "#66cc66", "#839557"],
@@ -302,7 +302,7 @@
                         }); //End create chart
                     },
                     error: function() {
-                        console.log('Error ambil BatchID');
+                      //  console.log('Error ambil BatchID');
                     }
                 });
                 OvenChartTimeOut= setTimeout(scan, 15000);

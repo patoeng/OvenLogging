@@ -101,7 +101,7 @@
                 dataType: "json",
                 async: false,
                 success: function (ov) {
-                    console.log("Oven ID = " + ov);
+                    //console.log("Oven ID = " + ov);
                     for (var x in ov) {
                         ovlist.push(ov[x]);
                     }
@@ -109,7 +109,7 @@
                     var arr = [];
                     for (var i = 0; i < 16; i++) {
                         var target = ovlist[i];
-                        console.log(target);
+                        //console.log(target);
 
                         //get heating batch
                         $.ajax({
@@ -154,7 +154,7 @@
                                         for (var i = 0; i < obj.length; i++) {
                                             arr.push([obj[i].FetchTime / 60, obj[i].Temperature]); //FetchTime = detik, dibagi 60 supaya jadi menit dan dibulatkan (roun-up)
                                         };
-                                        console.log("Length : " + obj.length);
+                                        //console.log("Length : " + obj.length);
 
                                         if (obj.length > 1) {
                                             $.jqplot(target, [arr, ucl, tgt, lcl], {
@@ -257,11 +257,11 @@
                                 });
                             },
                             error: function () {
-                                console.log('Error ambil BatchID');
-                            },
+                                //console.log('Error ambil BatchID');
+                            }
                         });
                     };
-                    console.log(arrOvenBatch);
+                    //console.log(arrOvenBatch);
                 }
             });
             setTimeout(chartDashboard, 15000);
@@ -381,7 +381,7 @@
                     }); 
                 },
                 error: function () {
-                    console.log('Error ambil BatchID');
+                    //console.log('Error ambil BatchID');
                 }
             });
         });

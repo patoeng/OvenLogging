@@ -360,9 +360,9 @@
                             tgt = [[xmin - 5, 175], [xmax + 5, 175]];
 
                             //label/legend series
-                            var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
-                            var plot1 = $.jqplot('chartdiv', [arr2, ucl, tgt, lcl], {
-                                seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557"],
+                            var seriesLabel = ['UCL', 'Target', 'LCL', 'Actual'];
+                            var plot1 = $.jqplot('chartdiv', [ucl, tgt, lcl,arr2], {
+                                seriesColors: ["#ff0000", "#6699cc", "#cc00cc", "#66cc66", "#839557"],
 
                                 axesDefaults: {
                                     labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
