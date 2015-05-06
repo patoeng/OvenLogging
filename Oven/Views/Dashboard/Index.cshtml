@@ -127,23 +127,21 @@
         $('.button-back').hide();
         // ========================Home=================================
         var TimeOut;
+        var OvenChartTimeOut;
         homeDashboard();
-        function homeDashboard() {
 
+        function homeDashboard() {
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("GetDaftarOven", "Dashboard")',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false,
-                success: function (ov) {
-                    var ovlist = [];                  
-                    //console.log("Oven ID = " + ov);
-                    for (var x in ov) {
-                        ovlist.push(ov[x]);
-                    }
+                success: function(ov) {
+                    var ovlist = ov;
                     var arr = [];
-                    for (var i = 0; i < 16; i++) {
+                    var i = 0;
+                    for (i = 0; i < ovlist.length; i++) {
                         var target = ovlist[i];
 
                         //get heating batch
@@ -154,29 +152,15 @@
                             data: { "ovenid": target },
                             dataType: "json",
                             async: false,
-                            success: function (hb) {
-                                var hbx = [];
-                                for (var y in hb) {
-                                    hbx.push(hb[y]);
-                                }
-                                console.log(hbx);
-
-                                console.log("Oven " + ovlist[i]);
-                                console.log("Batch " + hbx[0]);
-                                console.log("Status " + hbx[1]);
-                                console.log("Start " + hbx[2]);
-                                console.log("End " + hbx[2]);
-
-                                var ovn = "#" + ovlist[i];
-                                var stat = hbx[1];
-                                console.log(ovn);
-                                
+                            success: function(hb) {
+                                var ovn = "#" + target;
+                                var stat = hb.Status;
                                 $('p' + ovn).text("Status : " + stat);
                                 $('div' + ovn).addClass(stat);
 
                             },
 
-                            error: function () {
+                            error: function() {
                                 console.log('Error ambil BatchID');
                             }
                         });
@@ -184,7 +168,7 @@
                     };
                 }
             });
-           TimeOut= setTimeout(homeDashboard, 15000);
+            TimeOut = setTimeout(homeDashboard, 15000);
         };
 
 
@@ -203,24 +187,26 @@
         var tgt = [];
 
         //hardcode ucl, lcl dan target
-        ucl = [[xmin - 5, 185], [xmax + 5, 185]]
-        lcl = [[xmin - 5, 165], [xmax + 5, 165]]
-        tgt = [[xmin - 5, 175], [xmax + 5, 175]]
+        ucl = [[xmin - 5, 185], [xmax + 5, 185]];
+        lcl = [[xmin - 5, 165], [xmax + 5, 165]];
+        tgt = [[xmin - 5, 175], [xmax + 5, 175]];
 
         //label/legend series
         var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
-        $('.button-back').click(function () {
+        $('.button-back').click(function() {
             //$('#chartdiv').hide();
             $('#rowHome').show("slide", { direction: "right" }, 500);
+            clearTimeout(OvenChartTimeOut);
             TimeOut = setTimeout(homeDashboard, 15000);
+            $("#judul").text("Oven Monitoring");
             //$('.button-reset').hide();
             $(this).hide();
             $('#rowSingle').hide();
         });
-        $('.btnAddLot').click(function () {
+        $('.btnAddLot').click(function() {
             $('#divLot').show();
         });
-        $(".hOven").click(function () {
+        $(".hOven").click(function() {
             $('#rowHome').hide(); // hide dashboard
             $('#rowSingle').show(); // show div chart
             clearTimeout(TimeOut);
@@ -232,108 +218,127 @@
 
             //next olah data dan tampilkan ke chart
             var start = new Date().getTime();
-
             var hid = $(this).attr('id');
+            function scan() {
+              
 
-            //Get BatchID from OvenID
-            $.ajax({
-                type: "GET",
-                url: '@Url.Action("GetHeatingBatch", "Dashboard")',
-                contentType: "application/json; charset=utf-8",
-                data: { "ovenid": hid },
-                dataType: "json",
-                success: function (hb) {
-                    var hbx = [];
+                //Get BatchID from OvenID
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetHeatingBatch", "Dashboard")',
+                    contentType: "application/json; charset=utf-8",
+                    data: { "ovenid": hid },
+                    dataType: "json",
+                    success: function(hb) {
+                        var hbx = hb;
 
-                    for (var x in hb) {
-                        hbx.push(hb[x]);
-                    }
-                    blankChart();
+                        //blankChart();
+                        var x = hb.BatchID;
+                        $("#judul").text("Oven " + hid + " BatchID : " + x);
 
-                    var x = hbx[0];
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("GetBatchTemperature", "BatchTemperatures")',
+                            contentType: "application/json; charset=utf-8",
+                            data: { "batchID": x },
+                            dataType: "json",
+                            success: function(hasil) {
+                                var obj = hasil.data;
+                                var arr = [];
+                                for (var i = 0; i < obj.length; i++) {
+                                    arr.push([obj[i].FetchTime / 60, obj[i].Temperature]); //FetchTime = detik, dibagi 60 supaya jadi menit dan dibulatkan (roun-up)
+                                };
 
-                    $.ajax({
-                        type: "GET",
-                        url: '@Url.Action("GetBatchTemperature", "BatchTemperatures")',
-                        contentType: "application/json; charset=utf-8",
-                        data: { "batchID": x },
-                        dataType: "json",
-                        success: function (hasil) {
-                            var obj = hasil.data;
-                            var arr = [];
-                            for (var i = 0; i < obj.length; i++) {
-                                arr.push([obj[i].FetchTime / 60, obj[i].Temperature]); //FetchTime = detik, dibagi 60 supaya jadi menit dan dibulatkan (roun-up)
-                            };
+                                console.log(arr);
 
-                            console.log(arr);
+                                var plot1 = $.jqplot('chartdiv', [ucl, tgt, lcl, arr], {
+                                    seriesColors: [ "#cc00cc","#6699cc", "#ff0000", "#66cc66", "#839557"],
 
-                            var plot1 = $.jqplot('chartdiv', [arr, ucl, tgt, lcl], {
-                                seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557"],
-
-                                axesDefaults: {
-                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
-                                    tickOptions: {
-                                        formatString: '%d'
+                                    axesDefaults: {
+                                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                                        tickInterval: 10,
+                                        showTickMarks: false,
+                                        tickOptions: {
+                                            formatString: '%d'
+                                        },
+                                        labelOptions: {
+                                            fontFamily: 'Georgia, Serif',
+                                            fontSize: '8pt',
+                                            color: '#fff'
+                                        }
                                     },
-                                    labelOptions: {
-                                        fontFamily: 'Georgia, Serif', fontSize: '8pt', color: '#fff'
-                                    }
-                                },
-                                axes: {
-                                    xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
-                                    yaxis: { min: xmin, max: ymax, label: 'Temperature(C)' }
-                                },
-                                seriesDefaults: {
-                                    shadow: false,
-                                    trendline: { show: true, color: '#006600', label: '', type: 'exp', lineWidth: 1.5 },
-                                    markerOptions: { show: false, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699' },
-                                },
-                                grid: {
-                                    drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff', borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
-                                },
-                                legend: {
-                                    show: true, location: 'e', labels: seriesLabel,
-                                },
-                                highlighter: { show: true, sizeAdjust: 7.5 },
-                                cursor: { show: true, zoom: true, showTooltip: true }
-                            });
-                            plot1.replot();
+                                    axes: {
+                                        xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
+                                        yaxis: { min: xmin, max: ymax, label: 'Temperature(C)' }
+                                    },
+                                    seriesDefaults: {
+                                        shadow: false,
+                                        trendline: { show: true, color: '#006600', label: '', type: 'exp', lineWidth: 1.5 },
+                                        markerOptions: { show: false, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699' },
+                                    },
+                                    grid: {
+                                        drawGridLines: true,
+                                        gridLineColor: '#ccc',
+                                        background: '#fff',
+                                        borderColor: '#fff',
+                                        borderWidth: 1.0,
+                                        renderer: $.jqplot.CanvasGridRenderer
+                                    },
+                                    legend: {
+                                        show: true,
+                                        location: 'e',
+                                        labels: seriesLabel
+                                    },
+                                    highlighter: { show: true, sizeAdjust: 7.5 },
+                                    cursor: { show: true, zoom: true, showTooltip: true }
+                                });
+                                plot1.replot();
 
-                            //buat judul chart
-                            $("#judul").text("Oven " + hid + " BatchID : " + x);
-                            //tampilkan tombol reset zoom
-                        },
-                        error: function () { alert('Error generate chart..!'); }
-                    }); //End create chart
-                },
-                error: function () {
-                    console.log('Error ambil BatchID');
-                },
-            });
+                                //buat judul chart
+                                $("#judul").text("Oven " + hid + " BatchID : " + x);
+                                //tampilkan tombol reset zoom
+                            },
+                            error: function() { alert('Error generate chart..!'); }
+                        }); //End create chart
+                    },
+                    error: function() {
+                        console.log('Error ambil BatchID');
+                    }
+                });
+                OvenChartTimeOut= setTimeout(scan, 15000);
+            }
+
+            scan();
         });
 
         //KeyPress ENTER
-        
-        $('#txtLotNum').keydown(function (e) {
+
+        $('#txtLotNum').keydown(function(e) {
             var xx = $('#txtLotNum').val();
-            if(e.keyCode == 13){
+            if (e.keyCode == 13) {
                 alert(xx);
             }
-        })
+        });
 
         //=============================== blank chart function ===============================================
         var blankdata = [0, 0];
-        var blankChart = function () {
+        var blankChart = function() {
             var plot1 = $.jqplot('chartdiv', [blankdata, ucl, tgt, lcl], {
-                seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557", "#958c12",
-                        "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],
+                seriesColors: [
+                    "#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557", "#958c12",
+                    "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"
+                ],
                 axesDefaults: {
-                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
+                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                    tickInterval: 10,
+                    showTickMarks: false,
                     tickOptions: {
                         formatString: '%d'
                     },
                     labelOptions: {
-                        fontFamily: 'Georgia, Serif', fontSize: '8pt', color: '#fff'
+                        fontFamily: 'Georgia, Serif',
+                        fontSize: '8pt',
+                        color: '#fff'
                     }
                 },
                 axes: {
@@ -351,28 +356,45 @@
                 seriesDefaults: {
                     shadow: false,
                     trendline: {
-                        show: true, color: '#006600', label: '', type: 'linear', lineWidth: 1.5
+                        show: true,
+                        color: '#006600',
+                        label: '',
+                        type: 'linear',
+                        lineWidth: 1.5
                     },
                     markerOptions: {
-                        show: true, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699'
+                        show: true,
+                        style: 'filledCircle',
+                        lineWidth: 1,
+                        size: 1,
+                        color: '#336699'
                     },
                 },
                 grid: {
-                    drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff',
-                    borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
+                    drawGridLines: true,
+                    gridLineColor: '#ccc',
+                    background: '#fff',
+                    borderColor: '#fff',
+                    borderWidth: 1.0,
+                    renderer: $.jqplot.CanvasGridRenderer
                 },
                 legend: {
-                    show: true, location: 'e', labels: seriesLabel,
+                    show: true,
+                    location: 'e',
+                    labels: seriesLabel,
                 },
                 highlighter: {
-                    show: true, sizeAdjust: 7.5
+                    show: true,
+                    sizeAdjust: 7.5
                 },
                 cursor: {
-                    show: true, zoom: true, showTooltip: true
+                    show: true,
+                    zoom: true,
+                    showTooltip: true
                 }
             });
             plot1.replot();
         };
 
-   </script>
+    </script>
 }
