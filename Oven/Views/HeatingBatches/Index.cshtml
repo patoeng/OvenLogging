@@ -77,10 +77,12 @@
                 <tr>
                     <td>No.</td>
                     <td>Batch ID</td>
+                    <td>Oven ID</td>
                     <td>Device</td>
                     <td>Package</td>
                     <td>Lot Number</td>
                     <td>Qty</td>
+                    <td>Chart</td>
                 </tr>
             </thead>
             <tbody>
@@ -130,24 +132,28 @@
     <script type="text/javascript" language="javascript">
         var start_th, start_mn, start_dt = "";
         var end_th, end_mn, end_dt = "";
-        $(document).ready(function () {
-            $('#txtstartDate').datepicker({
+        var dataTableSearch;
+        var dataTableSearchLot;
 
+        $(document).ready(function() {
+
+            $('#cariSingle').hide();
+            $('#cariGrid').hide();
+            $('#txtstartDate').datepicker({
                 timepicker: false,
                 formatDate: 'Y/m/d',
-                minDate: '-1970/01/02',//yesterday is minimum date(for today use 0 or -1970/01/01)
-                maxDate: '+1970/01/02'//tommorow is maximum date calendar
+                minDate: '-1970/01/02', //yesterday is minimum date(for today use 0 or -1970/01/01)
+                maxDate: '+1970/01/02' //tommorow is maximum date calendar
 
             });
             $('#txtendDate').datepicker({
-
                 timepicker: false,
                 format: 'Y md',
                 numberOfMonths: 1
 
             });
 
-            $('#btn-reset').click(function () {
+            $('#btn-reset').click(function() {
                 var _startDate = "";
                 var _endDate = "";
                 var _batchID = 0;
@@ -155,24 +161,25 @@
                 var _lotnum = "";
                 $('#cariSingle').hide();
             });
-            $('.button-back').click(function () {
+            $('.button-back').click(function() {
                 $('#cariSingle').hide();
                 $('#cariGrid').show();
             });
 
-            $('#btn-search').click(function () {
+            $('#btn-search').click(function() {
                 var _startDate = "";
                 var _endDate = "";
                 var _batchID = 0;
                 var _ovenID = "";
                 var _lotnum = "";
 
-                $('#tblHasilSearchLot tbody').empty();
-                $('#tblHasilSearch tbody').empty();
+                $("#pError").text("");
+                $("#pError").hide();
                 $('#cariSingle').hide();
                 $('#cariGrid').show();
-                if ($("#inp-lot").val() !== "") {
-                    _lotnum = $("#inp-lot").val();
+                _lotnum = $("#inp-lot").val();
+                if (_lotnum != "") {
+                    $('#tblHasilSearch_wrapper').hide();
                     _startDate = "";
                     _endDate = "";
                     _batchID = 0;
@@ -185,50 +192,65 @@
                         contentType: "application/json; charset=utf-8",
                         async: false,
                         data: {
-                            lotNumber: _lotnum
+                            lotNumber: _lotnum,
+                            startDate: $("#txtstartDate").val(),
+                            endDate: $("#txtendDate").val(),
+                            batchid: $("#inp-batchID").val() === "" ? '0' : $("#inp-batchID").val(),
+                            ovenid: $("#inp-ovenID").val()
                         },
                         dataType: "json",
-                        success: function (hasil) {
-                            console.log(hasil);
-                            var arr = [];
-                            for (var y in hasil) {
-                                arr.push(hasil[y]);
-                            }
+                        success: function(hasil) {
+                            //console.log(hasil);
+                            var arr = hasil;
+
 
                             if (arr.length < 1) {
                                 $("#pError").show();
                                 $("#pError").text("Maaf, data Lot Number # " + _lotnum + " tidak ada di database...!");
                             } else {
-                                $('#tblHasilSearchLot tbody').empty();
+                                $('#tblHasilSearchLot_wrapper').show();
                                 $('#tblHasilSearchLot').show();
+                               // $('#tblHasilSearchLot tbody tr').remove();
+
+                                if ($.fn.DataTable.isDataTable('#tblHasilSearchLot')) {
+                                    dataTableSearchLot.fnClearTable('#tblHasilSearchLot');
+                                }
                                 for (var i = 0; i < arr.length; i++) {
-                                    $('#tblHasilSearchLot').append('<tr><td>'
-                                        + (i + 1) + '</td><td>'
-                                        + arr[i].batchid + '</td><td>'
-                                        + arr[i].device + '</td><td>'
-                                        + arr[i].package + '</td><td>'
-                                        + arr[i].lotnumber + '</td><td>'
-                                        + arr[i].qty + '</td><td>'
-                                        + ' <span class="btn btn-primary btnSingle" data="' + arr[i].batchid + '">View Chart</span></td></tr>');
+                                    if ($.fn.DataTable.isDataTable('#tblHasilSearchLot')) {
+                                        
+                                        var tombol = ' <span class="btn btn-primary btnSingle" data="' + arr[i].h.batchid + '">View Chart</span></td></tr>';
+                                        var index = dataTableSearchLot.fnAddData([(i + 1), arr[i].OvenID, arr[i].h.batchid, arr[i].h.device, arr[i].h.package, arr[i].h.lotnumber, arr[i].h.qty, tombol]);
+
+                                    } else {
+                                        $('#tblHasilSearchLot').append('<tr><td>'
+                                            + (i + 1) + '</td><td>'
+                                            + arr[i].h.batchid + '</td><td>'
+                                            + arr[i].OvenID + '</td><td>'
+                                            + arr[i].h.device + '</td><td>'
+                                            + arr[i].h.package + '</td><td>'
+                                            + arr[i].h.lotnumber + '</td><td>'
+                                            + arr[i].h.qty + '</td><td>'
+                                            + ' <span class="btn btn-primary btnSingle" data="' + arr[i].batchid + '">View Chart</span></td></tr>');
+                                    }
                                 };
-                                $('#tblHasilSearch').append('</tbody');
+
+                                if (!$.fn.DataTable.isDataTable('#tblHasilSearchLot')) {
+
+                                    $('#tblHasilSearchLot').addClass('table-striped');
+                                    $('#tblHasilSearchLot').addClass('table-condensed');
+                                    dataTableSearchLot = $('#tblHasilSearchLot').dataTable();
+                                }
                                 btnSingle();
-                                $('#tblHasilSearchLot').addClass('table-striped');
-                                $('#tblHasilSearchLot').addClass('table-condensed');
-
-                                $('#tblHasilSearch').dataTable();
-
-
                             }
                         },
-                        error: function (xhr, status, error) {
-                            console.log('Error eksekusi');
+                        error: function(xhr, status, error) {
+                            console.log(error);
                         }
                     });
                 } else {
-                    console.log($("#txtstartDate").val());
-                    console.log($("#txtendDate").val());
+
                     //general search
+                    $('#tblHasilSearchLot_wrapper').hide();
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("GetHeatingBatches", "HeatingBatches")',
@@ -241,47 +263,68 @@
                             ovenid: $("#inp-ovenID").val()
                         },
                         dataType: "json",
-                        success: function (hasil) {
+                        success: function(hasil) {
                             var arr = hasil;
-                            
+
                             //for (var y in hasil) {
                             //    arr.push(hasil[y]);
-                           // }
+                            // }
                             if (arr.length < 1001) {
+                                $('#tblHasilSearch_wrapper').show();
                                 $('#tblHasilSearch').show();
-                                for (var i = 0; i < arr.length; i++) {
-                                  
-                                    $('#tblHasilSearch').append('<tr><td>'
-                                        + (i + 1) + '</td><td>'
-                                        + arr[i].BatchID + '</td><td>'
-                                        + arr[i].OvenID + '</td><td>'
-                                        + arr[i].Status + '</td><td>'
-                                        +formatJSONDate(arr[i].StartDate) + '</td><td>'
-                                        +formatJSONDate(arr[i].EndDate)+ '</td><td>'
-                                        + ' <span class="btn btn-primary btnSingle" data="' + arr[i].BatchID + '">View Chart</span></td></tr>');
-                                };
-                                $('#tblHasilSearch').append('</tbody');
+                                $('#tblHasilSearch tbody tr').remove();
 
-                                $('#tblHasilSearch').addClass('table-striped');
-                                $('#tblHasilSearch').addClass('table-condensed');
+                                if ($.fn.DataTable.isDataTable('#tblHasilSearch')) {
+
+                                    dataTableSearch.fnClearTable('#tblHasilSearch');
+                                }
+
+                                for (var i = 0; i < arr.length; i++) {
+                                    if ($.fn.DataTable.isDataTable('#tblHasilSearch')) {
+                                        var start = formatJSONDate(arr[i].StartDate);
+                                        var end = formatJSONDate(arr[i].EndDate);
+                                        var tombol = ' <span class="btn btn-primary btnSingle" data="' + arr[i].BatchID + '">View Chart</span></td></tr>';
+                                        var index = dataTableSearch.fnAddData([(i + 1), arr[i].BatchID, arr[i].OvenID, arr[i].Status, start, end, tombol]);
+
+                                    } else {
+                                        $('#tblHasilSearch').append('<tr><td>'
+                                            + (i + 1) + '</td><td>'
+                                            + arr[i].BatchID + '</td><td>'
+                                            + arr[i].OvenID + '</td><td>'
+                                            + arr[i].Status + '</td><td>'
+                                            + formatJSONDate(arr[i].StartDate) + '</td><td>'
+                                            + formatJSONDate(arr[i].EndDate) + '</td><td>'
+                                            + ' <span class="btn btn-primary btnSingle" data="' + arr[i].BatchID + '">View Chart</span></td></tr>');
+                                    }
+                                };
+
+                                if (!$.fn.DataTable.isDataTable('#tblHasilSearch')) {
+
+                                    $('#tblHasilSearch').addClass('table-striped');
+                                    $('#tblHasilSearch').addClass('table-condensed');
+                                }
+
                                 btnSingle();
-                                $('#tblHasilSearch').dataTable();
+
+                                dataTableSearch = $('#tblHasilSearch').dataTable();
+
 
                             } else {
                                 $("#pError").show();
                                 $("#pError").text("Jumlah data hasil pencarian melebihi 1.000 record !, mohon dipersempit filternya dengan rentang waktu (tanggal) atau nomor Oven");
                             };
                         },
-                        error: function (xhr, status, error) {
-                            console.log('Error eksekusi');
+                        error: function(xhr, status, error) {
+                            console.log(error);
                         }
                     });
                 };
             });
+
             function btnSingle() {
 
 
-                $('.btnSingle').click(function () {
+                $('.btnSingle').click(function() {
                     $('#cariGrid').hide();
                     $('#cariSingle').show();
                     var x = $(this).attr("data");
@@ -292,7 +335,7 @@
                         contentType: "application/json; charset=utf-8",
                         data: { "batchID": x },
                         dataType: "json",
-                        success: function (hasil) {
+                        success: function(hasil) {
                             var obj = hasil.data;
                             var arr2 = [];
 
@@ -322,12 +365,16 @@
                                 seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557"],
 
                                 axesDefaults: {
-                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
+                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                                    tickInterval: 10,
+                                    showTickMarks: false,
                                     tickOptions: {
                                         formatString: '%d'
                                     },
                                     labelOptions: {
-                                        fontFamily: 'Georgia, Serif', fontSize: '8pt', color: '#fff'
+                                        fontFamily: 'Georgia, Serif',
+                                        fontSize: '8pt',
+                                        color: '#fff'
                                     }
                                 },
                                 axes: {
@@ -340,10 +387,17 @@
                                     markerOptions: { show: false, style: 'filledCircle', lineWidth: 1, size: 1, color: '#336699' },
                                 },
                                 grid: {
-                                    drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff', borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
+                                    drawGridLines: true,
+                                    gridLineColor: '#ccc',
+                                    background: '#fff',
+                                    borderColor: '#fff',
+                                    borderWidth: 1.0,
+                                    renderer: $.jqplot.CanvasGridRenderer
                                 },
                                 legend: {
-                                    show: true, location: 'e', labels: seriesLabel
+                                    show: true,
+                                    location: 'e',
+                                    labels: seriesLabel
                                 },
                                 highlighter: { show: true, sizeAdjust: 7.5 },
                                 cursor: { show: true, zoom: true, showTooltip: true }
@@ -355,22 +409,22 @@
                             //tampilkan tombol reset zoom
                             plot1.replot();
                         },
-                        error: function () { alert('Error generate chart..!'); }
+                        error: function() { alert('Error generate chart..!'); }
                     }); //End create chart*/
                 });
             }
+
             function formatJSONDate(jsonDate) {
-               
+
                 var d = new Date(parseInt(jsonDate.substr(6)));
                 var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-                var date = d.getDay() + " " + month[d.getMonth()] + ", " + d.getFullYear();
+                var date = d.getDate() + " " + month[d.getMonth()] + ", " + d.getFullYear();
                 var time = d.toLocaleTimeString().toLowerCase();
-                // format display date (e.g. 04/10/2012)
                 var displayDate = date + " " + time;
                 return displayDate;
             }
         });
-            
+
     </script>
 }

@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.DynamicData;
 using System.Web.Mvc;
 using Oven.Models;
 
@@ -19,15 +20,27 @@ namespace Oven.Controllers
         {
             return View(db.BatchLOTs.ToList());
         }
-        public ActionResult GetLot(string lotNumber)
+        public ActionResult GetLot(string lotNumber, string startDate, string endDate, string ovenID, int batchID)
         {
-            var batchLots = from h in db.BatchLOTs
-                                 select h;
 
-            if (!string.IsNullOrEmpty(lotNumber))
-            {
-                batchLots = batchLots.Where(h => h.lotnumber.Equals(lotNumber));
-            };
+            DateTime sDate = startDate == string.Empty ? DateTime.Parse("1970-01-01") : DateTime.Parse(startDate);
+            DateTime eDate = endDate == string.Empty ? DateTime.Now : DateTime.Parse(endDate);
+            var batchLots = from h in db.BatchLOTs
+                            join k in db.HeatingBatches on h.batchid equals k.BatchID
+                where ((h.lotnumber.Contains(lotNumber)) && (lotNumber != string.Empty))
+                where ((k.StartDate >= sDate) && (k.StartDate <= eDate))
+                where ((k.OvenID == ovenID) || (ovenID == string.Empty))
+                where ((k.BatchID == batchID) ||(batchID == 0))
+                
+
+                select new
+                {                    
+                    h,
+                    k.OvenID
+                };
+                           
+
+            
 
             /*if (batchId > 0)
             {
