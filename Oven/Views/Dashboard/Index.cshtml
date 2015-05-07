@@ -14,7 +14,7 @@
     </div>
     <div class="col-md-3" style="text-align:right; padding-top:20px;">
         <p>
-            @DateTime.Now.DayOfWeek, @DateTime.Now.Day / @DateTime.Now.Month / @DateTime.Now.Year [LW2214]
+            @DateTime.Now.DayOfWeek, @DateTime.Now.Day / @DateTime.Now.Month / @DateTime.Now.Year 
             <!-- <br />
             PM Due : 
             <br/>
@@ -46,7 +46,7 @@
         <div class="row" style="visibility: hidden;">
             <!-- start Lot Info -->
             <div class="col-md-12">
-                <h2 style="padding-top:0px; margin-top:0px; padding-bottom:10px;">Lots Information :</h2>
+                <h2 style="padding-top: 0px; margin-top: 0px; padding-bottom:10px;">Lots Information :</h2>
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary btnAddLot"><span class="glyphicon glyphicon-plus-sign"></span> Add Lot</button>
@@ -156,6 +156,7 @@
                                 var ovn = "#" + target;
                                 var stat = hb.Status;
                                 $('p' + ovn).text("Status : " + stat);
+                                $('div' + ovn).removeClass("RUN").removeClass("FIN");
                                 $('div' + ovn).addClass(stat);
 
                             },

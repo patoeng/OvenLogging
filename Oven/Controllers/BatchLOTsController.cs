@@ -31,17 +31,11 @@ namespace Oven.Controllers
                 where ((k.StartDate >= sDate) && (k.StartDate <= eDate))
                 where ((k.OvenID == ovenID) || (ovenID == string.Empty))
                 where ((k.BatchID == batchID) ||(batchID == 0))
-                
-
                 select new
                 {                    
                     h,
                     k.OvenID
                 };
-                           
-
-            
-
             /*if (batchId > 0)
             {
                 batchLots = batchLots.Where(h => h.batchid.Equals(batchId));
