@@ -218,7 +218,7 @@
                                 for (var i = 0; i < arr.length; i++) {
                                     if ($.fn.DataTable.isDataTable('#tblHasilSearchLot')) {
 
-                                        var tombol = buildButton(arr[i].BatchID, arr[i].OvenID) + '</td></tr>';
+                                        var tombol = buildButton(arr[i].h.batchid, arr[i].OvenID) + '</td></tr>';
                                         var index = dataTableSearchLot.fnAddData([(i + 1), arr[i].OvenID, arr[i].h.batchid, arr[i].h.device, arr[i].h.package, arr[i].h.lotnumber, arr[i].h.qty, tombol]);
 
                                     } else {
@@ -230,7 +230,7 @@
                                             + arr[i].h.package + '</td><td>'
                                             + arr[i].h.lotnumber + '</td><td>'
                                             + arr[i].h.qty + '</td><td>'
-                                            + buildButton(arr[i].BatchID,arr[i].OvenID)+'</td></tr>');
+                                            + buildButton(arr[i].h.batchid, arr[i].OvenID) + '</td></tr>');
                                     }
                                 };
 
@@ -347,7 +347,7 @@
                             //console.log(arr2);
 
                             var xmin = 0;
-                            var xmax = 450;
+                            var xmax = 1440;
                             var ymax = 200;
 
                             var arr = [];
@@ -367,7 +367,7 @@
 
                                 axesDefaults: {
                                     labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                                    tickInterval: 10,
+                                    tickInterval: 60,
                                     showTickMarks: false,
                                     tickOptions: {
                                         formatString: '%d'
