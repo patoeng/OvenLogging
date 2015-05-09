@@ -68,7 +68,7 @@
     <script type="text/javascript" language="javascript">
         //harcode Min Max canvas
         var xmin = 0;
-        var xmax = 450;
+        var xmax = 1440;
         var ymax = 200;
 
         var arr = [];
@@ -77,9 +77,9 @@
         var tgt = [];
 
         //hardcode ucl, lcl dan target
-        ucl = [[xmin - 5, 185], [xmax + 5, 185]]
-        lcl = [[xmin - 5, 165], [xmax + 5, 165]]
-        tgt = [[xmin - 5, 175], [xmax + 5, 175]]
+        ucl = [[xmin - 5, 130], [xmax + 5, 130]];
+        lcl = [[xmin - 5, 120], [xmax + 5, 120]];
+        tgt = [[xmin - 5, 125], [xmax + 5, 125]];
 
         //label/legend series
         var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
@@ -173,7 +173,8 @@
                                                     xaxis: {
                                                         min: xmin,
                                                         max: xmax,
-                                                        label: 'Time (Minutes)'
+                                                        label: 'Time (Minutes)',
+                                                        tickInterval: 120
                                                     },
                                                     yaxis: {
                                                         min: xmin,
@@ -221,12 +222,14 @@
                                                     xaxis: {
                                                         min: xmin,
                                                         max: xmax,
-                                                        label: 'Time (Minutes)'
+                                                        label: 'Time (Minutes)',
+                                                        tickInterval: 120
                                                     },
                                                     yaxis: {
                                                         min: xmin,
                                                         max: ymax,
                                                         label: 'Temperature(C)'
+                                                       
                                                     }
                                                 },
                                                 seriesDefaults: {
@@ -344,7 +347,7 @@
                                     seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557"],
 
                                     axesDefaults: {
-                                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 10, showTickMarks: false,
+                                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 25, showTickMarks: false,
                                         tickOptions: {
                                             formatString: '%d'
                                         },
@@ -354,7 +357,7 @@
                                     },
                                     axes: {
                                         xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
-                                        yaxis: { min: xmin, max: ymax, label: 'Temperature(C)' }
+                                        yaxis: { min: xmin, max: ymax, label: 'Temperature(C)', tickInterval: 120  }
                                     },
                                     seriesDefaults: {
                                         shadow: false,
@@ -397,7 +400,7 @@
                 ],
                 axesDefaults: {
                     labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                    tickInterval: 10,
+                    tickInterval: 120,
                     showTickMarks: false,
                     tickOptions: {
                         formatString: '%d'
@@ -417,6 +420,7 @@
                     yaxis: {
                         min: xmin,
                         max: ymax,
+                        tickInterval: 25,
                         label: 'Temperature(C)'
                     }
                 },
