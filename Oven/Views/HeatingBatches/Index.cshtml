@@ -210,14 +210,14 @@
                             } else {
                                 $('#tblHasilSearchLot_wrapper').show();
                                 $('#tblHasilSearchLot').show();
-                               // $('#tblHasilSearchLot tbody tr').remove();
+                                // $('#tblHasilSearchLot tbody tr').remove();
 
                                 if ($.fn.DataTable.isDataTable('#tblHasilSearchLot')) {
                                     dataTableSearchLot.fnClearTable('#tblHasilSearchLot');
                                 }
                                 for (var i = 0; i < arr.length; i++) {
                                     if ($.fn.DataTable.isDataTable('#tblHasilSearchLot')) {
-                                        
+
                                         var tombol = ' <span class="btn btn-primary btnSingle" data="' + arr[i].h.batchid + '">View Chart</span></td></tr>';
                                         var index = dataTableSearchLot.fnAddData([(i + 1), arr[i].OvenID, arr[i].h.batchid, arr[i].h.device, arr[i].h.package, arr[i].h.lotnumber, arr[i].h.qty, tombol]);
 
@@ -361,7 +361,7 @@
 
                             //label/legend series
                             var seriesLabel = ['UCL', 'Target', 'LCL', 'Actual'];
-                            var plot1 = $.jqplot('chartdiv', [ucl, tgt, lcl,arr2], {
+                            var plot1 = $.jqplot('chartdiv', [ucl, tgt, lcl, arr2], {
                                 seriesColors: ["#ff0000", "#6699cc", "#cc00cc", "#66cc66", "#839557"],
 
                                 axesDefaults: {
@@ -415,14 +415,16 @@
             }
 
             function formatJSONDate(jsonDate) {
+                if (jsonDate != null) {
+                    var d = new Date(parseInt(jsonDate.substr(6)));
+                    var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-                var d = new Date(parseInt(jsonDate.substr(6)));
-                var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-                var date = d.getDate() + " " + month[d.getMonth()] + ", " + d.getFullYear();
-                var time = d.toLocaleTimeString().toLowerCase();
-                var displayDate = date + " " + time;
-                return displayDate;
+                    var date = d.getDate() + " " + month[d.getMonth()] + ", " + d.getFullYear();
+                    var time = d.toLocaleTimeString().toLowerCase();
+                    var displayDate = date + " " + time;
+                    return displayDate;
+                }
+                return "";
             }
         });
 

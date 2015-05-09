@@ -30,11 +30,13 @@ namespace Oven.Controllers
         {
             DateTime sDate = startDate==string.Empty?DateTime.Now : DateTime.Parse(startDate);
             DateTime eDate = endDate == string.Empty ? DateTime.Now : DateTime.Parse(endDate);
+            eDate = eDate.AddDays(1);
            
             var heatingBatches = from h in db.HeatingBatches
                                  .Where(h=> (h.StartDate >= sDate) && (h.StartDate<= eDate)
                                          && (h.OvenID == ovenID || ovenID == string.Empty)
-                                         && (h.BatchID == batchID || batchID == 0))                                
+                                         && (h.BatchID == batchID || batchID == 0))   
+                                         where h.Status == "FIN"
                                  orderby h.BatchID descending 
                 select new
                 {

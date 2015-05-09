@@ -25,6 +25,8 @@ namespace Oven.Controllers
 
             DateTime sDate = startDate == string.Empty ? DateTime.Parse("1970-01-01") : DateTime.Parse(startDate);
             DateTime eDate = endDate == string.Empty ? DateTime.Now : DateTime.Parse(endDate);
+            eDate = eDate.AddDays(1);
+
             var batchLots = from h in db.BatchLOTs
                             join k in db.HeatingBatches on h.batchid equals k.BatchID
                 where ((h.lotnumber.Contains(lotNumber)) && (lotNumber != string.Empty))
