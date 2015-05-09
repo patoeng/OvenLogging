@@ -218,7 +218,7 @@
                                 for (var i = 0; i < arr.length; i++) {
                                     if ($.fn.DataTable.isDataTable('#tblHasilSearchLot')) {
 
-                                        var tombol = ' <span class="btn btn-primary btnSingle" data="' + arr[i].h.batchid + '">View Chart</span></td></tr>';
+                                        var tombol = buildButton(arr[i].BatchID, arr[i].OvenID) + '</td></tr>';
                                         var index = dataTableSearchLot.fnAddData([(i + 1), arr[i].OvenID, arr[i].h.batchid, arr[i].h.device, arr[i].h.package, arr[i].h.lotnumber, arr[i].h.qty, tombol]);
 
                                     } else {
@@ -230,7 +230,7 @@
                                             + arr[i].h.package + '</td><td>'
                                             + arr[i].h.lotnumber + '</td><td>'
                                             + arr[i].h.qty + '</td><td>'
-                                            + ' <span class="btn btn-primary btnSingle" data="' + arr[i].h.batchid + '">View Chart</span></td></tr>');
+                                            + buildButton(arr[i].BatchID,arr[i].OvenID)+'</td></tr>');
                                     }
                                 };
 
@@ -283,7 +283,7 @@
                                     if ($.fn.DataTable.isDataTable('#tblHasilSearch')) {
                                         var start = formatJSONDate(arr[i].StartDate);
                                         var end = formatJSONDate(arr[i].EndDate);
-                                        var tombol = ' <span class="btn btn-primary btnSingle" data="' + arr[i].BatchID + '">View Chart</span></td></tr>';
+                                        var tombol = buildButton(arr[i].BatchID, arr[i].OvenID) + '</td></tr>';
                                         var index = dataTableSearch.fnAddData([(i + 1), arr[i].BatchID, arr[i].OvenID, arr[i].Status, start, end, tombol]);
 
                                     } else {
@@ -294,7 +294,7 @@
                                             + arr[i].Status + '</td><td>'
                                             + formatJSONDate(arr[i].StartDate) + '</td><td>'
                                             + formatJSONDate(arr[i].EndDate) + '</td><td>'
-                                            + ' <span class="btn btn-primary btnSingle" data="' + arr[i].BatchID + '">View Chart</span></td></tr>');
+                                            + buildButton(arr[i].BatchID,arr[i].OvenID)+'</td></tr>');
                                     }
                                 };
 
@@ -328,12 +328,13 @@
                     $('#cariGrid').hide();
                     $('#cariSingle').show();
                     var x = $(this).attr("data");
+                    x = x.split('_');
 
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("GetBatchTemperature", "BatchTemperatures")',
                         contentType: "application/json; charset=utf-8",
-                        data: { "batchID": x },
+                        data: { "batchID": x[0] },
                         dataType: "json",
                         success: function(hasil) {
                             var obj = hasil.data;
@@ -346,7 +347,7 @@
                             //console.log(arr2);
 
                             var xmin = 0;
-                            var xmax = 450;
+                            var xmax = 1440;
                             var ymax = 200;
 
                             var arr = [];
@@ -355,9 +356,9 @@
                             var tgt = [];
 
                             //hardcode ucl, lcl dan target
-                            ucl = [[xmin - 5, 185], [xmax + 5, 185]];
-                            lcl = [[xmin - 5, 165], [xmax + 5, 165]];
-                            tgt = [[xmin - 5, 175], [xmax + 5, 175]];
+                            ucl = [[xmin - 5, 130], [xmax + 5, 130]];
+                            lcl = [[xmin - 5, 120], [xmax + 5, 120]];
+                            tgt = [[xmin - 5, 125], [xmax + 5, 125]];
 
                             //label/legend series
                             var seriesLabel = ['UCL', 'Target', 'LCL', 'Actual'];
@@ -366,7 +367,7 @@
 
                                 axesDefaults: {
                                     labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                                    tickInterval: 10,
+                                    tickInterval: 60,
                                     showTickMarks: false,
                                     tickOptions: {
                                         formatString: '%d'
@@ -379,7 +380,7 @@
                                 },
                                 axes: {
                                     xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
-                                    yaxis: { min: xmin, max: ymax, label: 'Temperature(C)' }
+                                    yaxis: { min: xmin, max: ymax, label: 'Temperature(C)', tickInterval: 10 }
                                 },
                                 seriesDefaults: {
                                     shadow: false,
@@ -405,7 +406,7 @@
                             plot1.replot();
 
                             //buat judul chart
-                            $("#judul").text("BatchID : " + x);
+                            $("#judul").text("Oven "+x[1] +" BatchID : " + x[0]);
                             //tampilkan tombol reset zoom
                             plot1.replot();
                         },
@@ -425,6 +426,10 @@
                     return displayDate;
                 }
                 return "";
+            }
+            function buildButton(batchid,oven) {
+
+                return ' <span class="btn btn-primary btnSingle" data="' + batchid+'_'+oven + '">View Chart</span>';
             }
         });
 
