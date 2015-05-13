@@ -179,7 +179,7 @@
         //define vareable support chart
         //harcode Min Max canvas
         var xmin = 0;
-        var xmax = 1440;
+        var xmax = 300;
         var ymax = 200;
 
         var arr = [];
@@ -188,9 +188,9 @@
         var tgt = [];
 
         //hardcode ucl, lcl dan target
-        ucl = [[xmin - 5, 130], [xmax + 5, 130]];
-        lcl = [[xmin - 5, 120], [xmax + 5, 120]];
-        tgt = [[xmin - 5, 125], [xmax + 5, 125]];
+        ucl = [[xmin - 5, 155], [xmax + 5, 155]];
+        lcl = [[xmin - 5, 145], [xmax + 5, 145]];
+        tgt = [[xmin - 5, 150], [xmax + 5, 150]];
 
         //label/legend series
         var seriesLabel = [ 'UCL', 'Target', 'LCL', 'Actual'];
@@ -257,7 +257,7 @@
 
                                     axesDefaults: {
                                         labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                                        tickInterval: 60,
+                                        tickInterval: 10,
                                         showTickMarks: false,
                                         tickOptions: {
                                             formatString: '%d'
@@ -270,7 +270,7 @@
                                     },
                                     axes: {
                                         xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
-                                        yaxis: { min: xmin, max: ymax, label: 'Temperature(C)', tickInterval: 10 }
+                                        yaxis: { min: xmin, max: ymax, label: 'Temperature(C)', tickInterval: 20 }
                                     },
                                     seriesDefaults: {
                                         shadow: false,
@@ -331,7 +331,7 @@
                 ],
                 axesDefaults: {
                     labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                    tickInterval: 60,
+                    tickInterval: 10,
                     showTickMarks: false,
                     tickOptions: {
                         formatString: '%d'
@@ -351,7 +351,7 @@
                     yaxis: {
                         min: xmin,
                         max: ymax,
-                        tickInterval: 10,
+                        tickInterval: 20,
                         label: 'Temperature(C)'
                     }
                 },
@@ -370,7 +370,7 @@
                         lineWidth: 1,
                         size: 1,
                         color: '#336699'
-                    },
+                    }
                 },
                 grid: {
                     drawGridLines: true,

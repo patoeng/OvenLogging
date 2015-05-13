@@ -68,7 +68,7 @@
     <script type="text/javascript" language="javascript">
         //harcode Min Max canvas
         var xmin = 0;
-        var xmax = 1440;
+        var xmax = 300;
         var ymax = 200;
 
         var arr = [];
@@ -77,9 +77,9 @@
         var tgt = [];
 
         //hardcode ucl, lcl dan target
-        ucl = [[xmin - 5, 130], [xmax + 5, 130]];
-        lcl = [[xmin - 5, 120], [xmax + 5, 120]];
-        tgt = [[xmin - 5, 125], [xmax + 5, 125]];
+        ucl = [[xmin - 5, 155], [xmax + 5, 155]];
+        lcl = [[xmin - 5, 145], [xmax + 5, 145]];
+        tgt = [[xmin - 5, 150], [xmax + 5, 150]];
 
         //label/legend series
         var seriesLabel = ['Actual', 'UCL', 'Target', 'LCL'];
@@ -107,7 +107,7 @@
                     }
 
                     var arr = [];
-                    for (var i = 0; i < 16; i++) {
+                    for (var i = 0; i < ovlist.length; i++) {
                         var target = ovlist[i];
                         //console.log(target);
 
@@ -161,7 +161,7 @@
                                                 seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557", "#958c12",
                                                         "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],
                                                 axesDefaults: {
-                                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 25, showTickMarks: false,
+                                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 20, showTickMarks: false,
                                                     tickOptions: {
                                                         formatString: '%d'
                                                     },
@@ -174,7 +174,7 @@
                                                         min: xmin,
                                                         max: xmax,
                                                         label: 'Time (Minutes)',
-                                                        tickInterval: 120
+                                                        tickInterval: 10
                                                     },
                                                     yaxis: {
                                                         min: xmin,
@@ -210,7 +210,7 @@
                                                 seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557", "#958c12",
                                                         "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],
                                                 axesDefaults: {
-                                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 25, showTickMarks: false,
+                                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 20, showTickMarks: false,
                                                     tickOptions: {
                                                         formatString: '%d'
                                                     },
@@ -223,7 +223,7 @@
                                                         min: xmin,
                                                         max: xmax,
                                                         label: 'Time (Minutes)',
-                                                        tickInterval: 120
+                                                        tickInterval: 10
                                                     },
                                                     yaxis: {
                                                         min: xmin,
@@ -347,7 +347,7 @@
                                     seriesColors: ["#6699cc", "#ff0000", "#66cc66", "#cc00cc", "#839557"],
 
                                     axesDefaults: {
-                                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 25, showTickMarks: false,
+                                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer, tickInterval: 20, showTickMarks: false,
                                         tickOptions: {
                                             formatString: '%d'
                                         },
@@ -357,7 +357,7 @@
                                     },
                                     axes: {
                                         xaxis: { min: xmin, max: xmax, label: 'Time (Minutes)' },
-                                        yaxis: { min: xmin, max: ymax, label: 'Temperature(C)', tickInterval: 120  }
+                                        yaxis: { min: xmin, max: ymax, label: 'Temperature(C)', tickInterval: 10  }
                                     },
                                     seriesDefaults: {
                                         shadow: false,
@@ -368,7 +368,7 @@
                                         drawGridLines: true, gridLineColor: '#ccc', background: '#fff', borderColor: '#fff', borderWidth: 1.0, renderer: $.jqplot.CanvasGridRenderer
                                     },
                                     legend: {
-                                        show: true, location: 'e', labels: seriesLabel,
+                                        show: true, location: 'e', labels: seriesLabel
                                     },
                                     highlighter: { show: true, sizeAdjust: 7.5 },
                                     cursor: { show: true, zoom: true, showTooltip: true }
@@ -400,7 +400,7 @@
                 ],
                 axesDefaults: {
                     labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                    tickInterval: 120,
+                    tickInterval: 10,
                     showTickMarks: false,
                     tickOptions: {
                         formatString: '%d'
@@ -420,7 +420,7 @@
                     yaxis: {
                         min: xmin,
                         max: ymax,
-                        tickInterval: 25,
+                        tickInterval: 20,
                         label: 'Temperature(C)'
                     }
                 },
@@ -439,7 +439,7 @@
                         lineWidth: 1,
                         size: 1,
                         color: '#336699'
-                    },
+                    }
                 },
                 grid: {
                     drawGridLines: true,
@@ -452,7 +452,7 @@
                 legend: {
                     show: true,
                     location: 'e',
-                    labels: seriesLabel,
+                    labels: seriesLabel
                 },
                 highlighter: {
                     show: true,
